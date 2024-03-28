@@ -1,0 +1,43 @@
+data "aws_availability_zones" "available" {}
+
+locals {
+  name     = "kubernetes-the-hard-way"
+  vpc_cidr = "10.20.0.0/16"
+  azs      = slice(data.aws_availability_zones.available.names, 0, 3)
+  tags = {
+    ProjName    = "kubernetes-the-hard-way"
+    Created = "terraform"
+  }
+}
+
+module "vpc" {
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "~> 5.0"
+
+  ############
+  # Behavior
+  ############
+  create_vpc                   = true
+  use_ipam_pool                = false # default
+  enable_ipv6                  = false # default
+  enable_dhcp_options          = false # default
+  create_igw                   = true  # default
+  public_dedicated_network_acl = false # default
+  single_nat_gateway           = false # default, affects private route_table_associations
+  map_public_ip_on_launch      = true  # default == false
+  #
+  # length(public_subnets) == 0 THEN create_public_subnets == FALSE
+  # length(private_subnets) == 0 THEN create_private_subnets == FALSE
+  # length(database_subnets) == 0 THEN create_database_subnets == FALSE
+
+  name = local.name
+  cidr = local.vpc_cidr
+
+  azs             = local.azs
+  private_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 4, k)]
+
+  public_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 48)]
+  #private_subnet_names = ["private_subnet_1", "private_subnet_2", "private_subnet_3"]
+
+  tags = local.tags
+}

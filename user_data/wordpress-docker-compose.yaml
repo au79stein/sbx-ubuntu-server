@@ -1,0 +1,53 @@
+version: '3.1'
+
+services: #Sets up the services that we will need
+
+  wordpress: #Our instance of wordpress
+
+    image: wordpress
+
+    restart: always
+
+    ports:
+
+      - 8080:80 #sets up a port forwarding rule so we can access our container
+
+    environment:
+
+      WORDPRESS_DB_HOST: db
+
+      WORDPRESS_DB_USER: exampleuser #Add a username here, this should match MYSQL_USER below
+
+      WORDPRESS_DB_PASSWORD: examplepass #Add a **strong** password, this should match the MYSQL_PASSWORD below
+
+      WORDPRESS_DB_NAME: exampledb #Add a db name, just using "Wordpress" is a good option. This should match MYSQL_DATABASE below
+
+    volumes:
+
+      - wordpress:/var/www/html
+
+  db: #The database image that wordpress is going to make use of
+
+    image: mysql:5.7
+
+    restart: always
+
+    environment:
+
+      MYSQL_DATABASE: exampledb #Set to same value as WORDPRESS_DB_NAME
+
+      MYSQL_USER: exampleuser #Set to same value as WORDPRESS_DB_USER
+
+      MYSQL_PASSWORD: examplepass # Set to same value as WORDPRESS_DB_PASSWORD
+
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+
+    volumes:
+
+      - db:/var/lib/mysql
+
+volumes:
+
+  wordpress:
+
+  db:
