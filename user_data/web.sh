@@ -84,9 +84,9 @@ su ubuntu -c 'curl https://raw.githubusercontent.com/helm/helm/master/scripts/ge
 ###################
 # install golang: #
 ###################
-su ubuntu -c 'cd ~ && curl -OL https://go.dev/dl/go1.20.6.linux-amd64.tar.gz'
-su ubuntu -c 'sha256sum ~/go1.20.6.linux-amd64.tar.gz'
-cd ~ubuntu && tar -C /usr/local -xvf go1.21.1.linux-amd64.tar.gz
+su ubuntu -c 'cd ~ && curl -OL https://go.dev/dl/go1.22.1.linux-amd64.tar.gz'
+su ubuntu -c 'sha256sum ~/go1.22.1.linux-amd64.tar.gz'
+cd ~ubuntu && tar -C /usr/local -xvf go1.22.1.linux-amd64.tar.gz
 su ubuntu -c 'echo "export PATH=$PATH:/usr/local/go/bin"  >> ~/.profile'
 su ubuntu -c 'source ~/.profile'
 su ubuntu -c 'go version'
