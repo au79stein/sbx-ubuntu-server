@@ -180,6 +180,13 @@ systemctl status grafana-server
 systemctl enable grafana-server.service
 
 
+################
+# install tree #
+################
+echo "installing tree utility..."
+apt install -y tree
+echo "tree was installed"
+
 
 #################
 # install nginx #
